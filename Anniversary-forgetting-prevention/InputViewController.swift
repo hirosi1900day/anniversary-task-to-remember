@@ -53,9 +53,9 @@ class InputViewController: UIViewController {
             self.anniversaryArray.present = presentSwitch
             if anniversaryArray.title != "" && anniversaryArray.contents != ""{
                 self.realm.add(self.anniversaryArray, update: .modified)
-                setNotification(anniversaryArray: anniversaryArray)
             }
         }
+        setNotification(anniversaryArray: anniversaryArray)
         
         super.viewWillDisappear(animated)
     }
@@ -77,9 +77,11 @@ class InputViewController: UIViewController {
         let calendar = Calendar.current
         let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: anniversaryArray.date)
         
-        let beforeDateDate = DateComponents(day: -7)
-        let beforeDate = calendar.date(byAdding: beforeDateDate, to: anniversaryArray.date)
-        let beforeDateComponents = calendar.dateComponents(in: TimeZone.current, from: beforeDate ?? Foundation.Date())
+        let beforeDate = calendar.date(byAdding: .day, value: -7, to: anniversaryArray.date)
+        
+        
+        
+        let beforeDateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: beforeDate!)
         
         let center = UNUserNotificationCenter.current()
         
@@ -103,7 +105,7 @@ class InputViewController: UIViewController {
             let request2 = UNNotificationRequest(identifier: String(anniversaryArray.id) + "before", content: contentBefore, trigger: trigger2)
             
             center.add(request2) { (error) in
-                print(error ?? "ローカル通知登録 OK")
+                print(error ?? "ローカル通知登録 OK2")
             }
         }
         
@@ -117,7 +119,7 @@ class InputViewController: UIViewController {
         
         
         center.add(request) { (error) in
-            print(error ?? "ローカル通知登録 OK")
+            print(error ?? "ローカル通知登録 OK1")
         }
         
         center.getPendingNotificationRequests { (requests: [UNNotificationRequest]) in
